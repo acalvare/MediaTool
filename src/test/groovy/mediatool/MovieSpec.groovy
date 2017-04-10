@@ -17,15 +17,15 @@ class MovieSpec extends Specification {
 
     void "Saving a movie and then retrieving it works"(){
         given: "A new movie"
-        Movie movie = new Movie(path: "/test/path", title:"test movie")
+        Movie movie = new Movie(url: "/test/url", title:"test movie")
 
         when: "We save the movie and then retrieve it from the DB"
         movie.save()
-        Movie movieFromDb = Movie.findByPath(movie.path)
+        Movie movieFromDb = Movie.findByUrl(movie.url)
 
-        then: "The two movies should have the same path and title"
+        then: "The two movies should have the same url and title"
         movieFromDb != null
-        movie.path == movieFromDb.path
+        movie.url == movieFromDb.url
         movie.title == movieFromDb.title
     }
 }

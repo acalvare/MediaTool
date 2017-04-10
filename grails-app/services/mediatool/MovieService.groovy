@@ -44,7 +44,7 @@ class MovieService {
                 }else
                     break
             }
-            titles.add(new Movie(title:sanitizedName.trim(),path:path))
+            titles.add(new Movie(title:sanitizedName.trim(), url:path))
 
         }
         return titles
@@ -56,11 +56,11 @@ class MovieService {
         List<Movie> titles = sanitizeMovieTitles(files)
         List<Movie> movies = new ArrayList<>()
         titles.each {
-            Movie movie = Movie.findByPath(it.path)
+            Movie movie = Movie.findByUrl(it.url)
             if(movie == null){
                 movie = getAdditonalMovieInformation(it, 0)
             } else {
-                println"\t\t\t $movie.title found in the database!"
+                println"$movie.title found in the database!"
             }
             if(movie != null) {
                 movie.save()
@@ -87,7 +87,7 @@ class MovieService {
                 def artPath = result.poster_path
                 byte[] picture = getPoster(artPath, 300)
                 if (picture != null) {
-                    movie.imageURL = baseImageURL + "300" + artPath
+                    movie.artURL = baseImageURL + "300" + artPath
                     movie.title = result.original_title
                 } else {
                     movie.title = result.original_title

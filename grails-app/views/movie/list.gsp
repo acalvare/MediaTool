@@ -9,7 +9,7 @@
         <div id="movies">
             <g:each in="${movies}" var="movie">
                 <q>${movie.title}</q>
-                <img src="${movie.imageURL}" alt="${movie.title}" >
+                <img src="${movie.artURL}" alt="${movie.title}" >
             </g:each>
         </div>
     </body>

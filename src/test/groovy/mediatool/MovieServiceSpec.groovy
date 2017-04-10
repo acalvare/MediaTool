@@ -11,11 +11,11 @@ class MovieServiceSpec extends Specification {
 
 
     void "GetAllMovieFilesTest"() {
-        given: "A path and a movieservice"
+        given: "A url and a movieservice"
         String path = "\\\\HTPC\\hd"
         MovieService service = new MovieService()
 
-        when: "You get all of the files in the path"
+        when: "You get all of the files in the url"
         List<File> files = service.getFiles(path)
 
         then: "The list is greater than zero"
@@ -24,11 +24,11 @@ class MovieServiceSpec extends Specification {
     }
 
     void "GetAllMovieTitles"() {
-        given: "A path and a movieservice"
+        given: "A url and a movieservice"
         String path = "\\\\HTPC\\hd"
         MovieService service = new MovieService()
 
-        when: "You get all of the files in the path"
+        when: "You get all of the files in the url"
         List<File> files = service.getFiles(path)
         List<Movie> titles = service.sanitizeMovieTitles(files)
 
@@ -42,7 +42,7 @@ class MovieServiceSpec extends Specification {
         MovieService service = new MovieService()
 
         when: "You get the movie list of the api call for 'Troy'"
-        Movie movie = service.getAdditonalMovieInformation("Troy")
+        Movie movie = service.getAdditonalMovieInformation(new Movie(title: "Troy"),0)
 
         then: "The result has at least one move"
         movie.title != null
