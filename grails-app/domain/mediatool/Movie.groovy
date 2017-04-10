@@ -3,7 +3,10 @@ package mediatool
 class Movie {
 
     static constraints = {
-        id name:path
+        image nullable: true
+        imageURL nullable: true
+        length nullable: true
+        genre nullable: true
     }
 
     byte[] image

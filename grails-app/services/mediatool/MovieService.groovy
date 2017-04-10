@@ -9,6 +9,7 @@ class MovieService {
     def apiKey="a3bc5a9763a2e77b25e0ce55f9869709"
     def baseUrl="https://api.themoviedb.org/3/search/"
     String baseImageURL = "http://image.tmdb.org/t/p/w"
+    final static String MAX_TRIES = 3
 
     List<Files> getFiles(String path) {
         List<Files> files = new ArrayList<>()
@@ -55,7 +56,12 @@ class MovieService {
         List<Movie> titles = sanitizeMovieTitles(files)
         List<Movie> movies = new ArrayList<>()
         titles.each {
-            Movie movie = getAdditonalMovieInformation(it)
+            Movie movie = Movie.findByPath(it.path)
+            if(movie == null){
+                movie = getAdditonalMovieInformation(it, 0)
+            } else {
+                println"\t\t\t $movie.title found in the database!"
+            }
             if(movie != null) {
                 movie.save()
                 movies << movie
@@ -66,8 +72,8 @@ class MovieService {
     }
 
 
-    Movie getAdditonalMovieInformation(Movie movie) {
-
+    Movie getAdditonalMovieInformation(Movie movie, int currentTry) {
+        if(currentTry < MAX_TRIES){
         def response
         def slurper = new JsonSlurper()
         def type = "movie"
@@ -94,12 +100,15 @@ class MovieService {
          else if(httpConnection.responseCode == 429){
             println "Http Response for $movie.title resulted in $httpConnection.responseCode, sleeping for 10 seconds"
             sleep(10000)
+            return getAdditonalMovieInformation(movie, currentTry++)
         }
         else{
             println "Http Response for $movie.title resulted in $httpConnection.responseCode"
         }
-
-        return movie
+        return movie}
+        else{
+            println "Exceeded the maximum number of lookup attempts for movie $movie.title"
+        }
     }
 
     def getPoster(String path, int width){

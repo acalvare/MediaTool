@@ -9,6 +9,7 @@ import spock.lang.Specification
 @TestFor(MovieService)
 class MovieServiceSpec extends Specification {
 
+
     void "GetAllMovieFilesTest"() {
         given: "A path and a movieservice"
         String path = "\\\\HTPC\\hd"
@@ -33,7 +34,7 @@ class MovieServiceSpec extends Specification {
 
         then: "The list is greater than zero"
         titles.size() > 0
-        titles.each { println it }
+        titles.each { println it.title }
     }
 
     void "GetMovieInformation"() {
@@ -48,18 +49,4 @@ class MovieServiceSpec extends Specification {
 
     }
 
-    void "GetAllLocalMovies"() {
-        given: "A path and a movieservice"
-        String path = "\\\\HTPC\\hd"
-        MovieService service = new MovieService()
-
-        when: "You get all of the files in the path"
-        List<Movie> movies = service.getAllLocalMovieInformation(path)
-
-        then: "The list is greater than zero"
-        movies.size() > 0
-        movies.each { println it.title }
-
-
-    }
 }
