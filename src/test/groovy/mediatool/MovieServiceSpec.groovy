@@ -29,7 +29,7 @@ class MovieServiceSpec extends Specification {
 
         when: "You get all of the files in the path"
         List<File> files = service.getFiles(path)
-        List<String> titles = service.sanitizeMovieTitles(files)
+        List<Movie> titles = service.sanitizeMovieTitles(files)
 
         then: "The list is greater than zero"
         titles.size() > 0
@@ -41,7 +41,7 @@ class MovieServiceSpec extends Specification {
         MovieService service = new MovieService()
 
         when: "You get the movie list of the api call for 'Troy'"
-        Movie movie = service.getMovieInformation("Troy")
+        Movie movie = service.getAdditonalMovieInformation("Troy")
 
         then: "The result has at least one move"
         movie.title != null
