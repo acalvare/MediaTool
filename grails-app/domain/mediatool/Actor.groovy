@@ -7,7 +7,7 @@ import mediatool.Movie
  */
 class Actor {
 /*    static hasMany = [media: Media]*/
-    static belongsTo = [Media]
+    static belongsTo = [Movie]
     String firstName
     String lastName
 }

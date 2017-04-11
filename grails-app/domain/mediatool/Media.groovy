@@ -17,7 +17,6 @@ abstract class Media {
     String url
     int length
     boolean watched
-    static hasMany = [actors: Actor]
     Date releaseDate
     Quality quality
     String source

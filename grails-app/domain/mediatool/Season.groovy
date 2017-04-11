@@ -5,7 +5,7 @@ package mediatool
  */
 class Season {
     int seasonNumber
-    //static hasMany = [episodes: Episode]
+    static hasMany = [episodes: Episode]
     static belongsTo = [Show]
     Date releaseDate
     Date endDate
