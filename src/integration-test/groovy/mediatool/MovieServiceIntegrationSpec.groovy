@@ -31,7 +31,7 @@ class MovieServiceIntegrationSpec extends Specification {
 
     void "GetAllLocalMovies"() {
         given: "A url and a movieservice"
-        String path = "\\\\HTPC\\hd"
+        String path = "./resources/test/movies"
         MovieService service = new MovieService()
 
         when: "You get all of the files in the url"

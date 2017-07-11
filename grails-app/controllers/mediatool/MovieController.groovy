@@ -14,9 +14,8 @@ class MovieController {
     }
 
     def list(){
-        List<Movie> movieList = service.getAllLocalMovieInformation("\\\\HTPC\\hd")
+        List<Movie> movieList = service.getAllLocalMovieInformation("./resources/test/movies")
         print "Generating movie view"
         [movies:movieList]
-        /*[movie:movieList[0]]*/
     }
 }

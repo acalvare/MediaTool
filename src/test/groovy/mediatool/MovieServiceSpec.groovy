@@ -12,7 +12,7 @@ class MovieServiceSpec extends Specification {
 
     void "GetAllMovieFilesTest"() {
         given: "A url and a movieservice"
-        String path = "\\\\HTPC\\hd"
+        String path = "./resources/test/movies"
         MovieService service = new MovieService()
 
         when: "You get all of the files in the url"
@@ -25,7 +25,7 @@ class MovieServiceSpec extends Specification {
 
     void "GetAllMovieTitles"() {
         given: "A url and a movieservice"
-        String path = "\\\\HTPC\\hd"
+        String path = "./resources/test/movies"
         MovieService service = new MovieService()
 
         when: "You get all of the files in the url"
