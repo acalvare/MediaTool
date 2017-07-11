@@ -7,7 +7,6 @@ import java.nio.file.Files
 class MovieService {
 
     def apiKey="a3bc5a9763a2e77b25e0ce55f9869709"
-    def baseUrl="https://api.themoviedb.org/3/search/"
     String baseImageURL = "http://image.tmdb.org/t/p/w"
     final static String MAX_TRIES = 3
 
@@ -85,13 +84,8 @@ class MovieService {
             def result = response.results[0]
             if(result != null) {
                 def artPath = result.poster_path
-                byte[] picture = getPoster(artPath, 300)
-                if (picture != null) {
                     movie.artURL = baseImageURL + "300" + artPath
                     movie.title = result.original_title
-                } else {
-                    movie.title = result.original_title
-                }
             }
             else{
                 println "No movie data found for $movie.title"
@@ -111,15 +105,6 @@ class MovieService {
         }
     }
 
-    def getPoster(String path, int width){
-
-        def httpConnection = new URL(baseImageURL+width+path).openConnection()
-        if(httpConnection.responseCode == httpConnection.HTTP_OK) {
-            Byte[] picture = httpConnection.inputStream.bytes
-            return picture
-        }
-        return null
-    }
 
 
 }
