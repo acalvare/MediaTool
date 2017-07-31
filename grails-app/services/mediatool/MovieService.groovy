@@ -5,6 +5,7 @@ import groovy.json.JsonSlurper
 import java.nio.file.Files
 
 class MovieService {
+    def messageSource
 
     def apiKey="a3bc5a9763a2e77b25e0ce55f9869709"
     String baseImageURL = "http://image.tmdb.org/t/p/w"
@@ -57,17 +58,26 @@ class MovieService {
         titles.each {
             Movie movie = Movie.findByUrl(it.url)
             if(movie == null){
+                println "Movie with path $it.url not in database, looking up additional movie information"
                 movie = getAdditonalMovieInformation(it, 0)
             } else {
                 println"$movie.title found in the database!"
             }
             if(movie != null) {
-                movie.save()
-                movies << movie
+                if(movie.validate()) {
+                    movie.save()
+                    movies << movie
+                } else{
+                    println movie.errors
+                }
             }
         }
         println "$movies.size() movies found!"
         return movies
+    }
+
+    def loadNetflixMovies(){
+
     }
 
 
@@ -84,7 +94,7 @@ class MovieService {
             def result = response.results[0]
             if(result != null) {
                 def artPath = result.poster_path
-                    movie.artURL = baseImageURL + "300" + artPath
+                    movie.artURL = baseImageURL + "150" + artPath
                     movie.title = result.original_title
             }
             else{

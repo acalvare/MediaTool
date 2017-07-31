@@ -1,7 +1,8 @@
 package mediatool
 
 class MovieController {
-    MovieService service = new MovieService()
+    MovieService movieService
+    static defaultAction = "list"
 
     def index() {
         List<Movie> movies = [new Movie(title: "Gone with the Wind"), new Movie(title: "Troy")]
@@ -14,7 +15,7 @@ class MovieController {
     }
 
     def list(){
-        List<Movie> movieList = service.getAllLocalMovieInformation("./resources/test/movies")
+        List<Movie> movieList = movieService.getAllLocalMovieInformation("./resources/test/movies")
         print "Generating movie view"
         [movies:movieList]
     }
