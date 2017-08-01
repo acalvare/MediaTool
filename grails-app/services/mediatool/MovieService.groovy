@@ -1,6 +1,7 @@
 package mediatool
 
 import groovy.json.JsonSlurper
+import groovyx.net.http.RESTClient
 
 import java.nio.file.Files
 
@@ -112,6 +113,79 @@ class MovieService {
         return movie}
         else{
             println "Exceeded the maximum number of lookup attempts for movie $movie.title"
+        }
+    }
+
+    String getNetflixContentList(){
+        def url = 'https://www.allflicks.net'
+        def path = '/wp-content/themes/responsive/processing/processing_us.php'
+        String sessionId = getSessionCookie(url)
+        def params = generateParmsMap()
+        def requestHeaders = generateRequestParams(sessionId)
+        List<String> titles = new ArrayList<>()
+        int currentResults = 0
+        int maxResults = 1000
+
+        for(currentResults ; currentResults < maxResults ; currentResults+=100){
+            params.put('start', currentResults)
+            titles.add(queryServer(url, requestHeaders, path, params))
+        }
+    }
+
+    Map generateParmsMap(){
+        Map params = [:]
+        this.class.classLoader.getResourceAsStream('params.txt').eachLine {
+            def values = it.split(":")
+            def key = values[0]
+            def value
+            if(values.size() >1) {
+                value = values[1]
+            } else {
+                value = ""
+            }
+            params.put(key,value)
+        }
+        return params
+    }
+    Map generateRequestParams(String sessionId){
+        Map requestHeaders = [:]
+        this.class.classLoader.getResourceAsStream('headers.txt').eachLine {
+            def key = it.substring(0,it.indexOf(':'))
+            def value = it.substring(it.indexOf(':')+1)
+            if (key == 'Cookie') {
+                value = value.replace("{IDENTIFIER}", sessionId)
+            }
+            requestHeaders.put(key,value)
+        }
+        return requestHeaders
+    }
+
+    def queryServer(String url, Map requestHeaders, String path, Map params) {
+        def allFlicks = new RESTClient(url)
+        allFlicks.ignoreSSLIssues()
+        allFlicks.headers = requestHeaders
+        allFlicks.post(path: path, body: params) {
+            resp, data ->
+                JsonSlurper slurper = new JsonSlurper()
+                def entries = slurper.parseText(data.text())
+                entries.data.each {
+                    println it.title
+                    return it.title
+                }
+        }
+
+    }
+
+    String getSessionCookie(String url){
+        String idString = "identifier="
+        def allFlicks = new RESTClient(url)
+        allFlicks.ignoreSSLIssues()
+        allFlicks.get(path:"/"){
+            resp, data ->
+                def dataString = data.toString()
+                String identifier = dataString.substring(dataString.indexOf(idString)+idString.length())
+                return identifier.substring(0,identifier.indexOf("\""))
+
         }
     }
 

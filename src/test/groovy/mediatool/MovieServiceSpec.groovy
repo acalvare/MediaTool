@@ -10,6 +10,31 @@ import spock.lang.Specification
 class MovieServiceSpec extends Specification {
 
 
+    void "Gets Params Maps"(){
+        given: "A movie service"
+        MovieService service = new MovieService()
+
+        when: "I generate the params map"
+        Map paramsMap = service.generateParmsMap()
+
+        then: "The params map is not empty or null"
+        paramsMap != null
+        paramsMap.keySet().size() > 0
+    }
+
+    void "Getting a new session id"(){
+        given: "A movie service"
+        MovieService service = new MovieService()
+
+        when: "I generate attempt to get a new session id"
+        String id= service.getSessionCookie("https://www.allflicks.net")
+
+        then: "The session id is non null and non empty"
+        println "Session id is $id"
+        id != null
+        id.length() > 0
+    }
+
     void "GetAllMovieFilesTest"() {
         given: "A url and a movieservice"
         String path = "./resources/test/movies"
